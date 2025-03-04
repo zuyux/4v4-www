@@ -16,7 +16,7 @@ export default function MainPage() {
   const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff'); // Default secondary color to black (now for lighting)
   const [brushSize, setBrushSize] = useState<string>('medium');
   const [texture, setTexture] = useState<string>('default'); // Default texture, will be updated from localStorage if available
-  const [background, setBackground] = useState<string>('#d1d5db');
+  const [background, setBackground] = useState<string>('#ffffff');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal
 
@@ -58,7 +58,7 @@ export default function MainPage() {
     setSecondaryColor('#ffffff');
     setBrushSize('medium');
     setTexture('default');
-    setBackground('#d1d5db');
+    setBackground('#ffffff');
   };
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);

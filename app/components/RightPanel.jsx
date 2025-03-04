@@ -41,7 +41,7 @@ export default function RightPanel({
         />
       </div>
       <div>
-        <label htmlFor="backgroundPicker" className="block text-sm mb-2">Backgrounds</label>
+        <label htmlFor="backgroundPicker" className="block text-sm mb-2">Background</label>
         <input
           id="backgroundPicker"
           type="color"
