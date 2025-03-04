@@ -1,17 +1,18 @@
 import { useState } from 'react';
-import { Search, Eye } from 'lucide-react';
+import { Search } from 'lucide-react';
+import Image from 'next/image';
 
 const avatars = [
-  { id: 1, style: 'Humanoid', image: '/avatars/humanoid1.png', label: 'Humanoid' },
-  { id: 2, style: 'Humanoid', image: '/avatars/humanoid2.png', label: 'Humanoid' },
-  { id: 3, style: 'Humanoid', image: '/avatars/humanoid3.png', label: 'Humanoid' },
-  { id: 4, style: 'Humanoid', image: '/avatars/humanoid4.png', label: 'Humanoid' },
-  { id: 5, style: 'Humanoid', image: '/avatars/humanoid5.png', label: 'Humanoid' },
-  { id: 6, style: 'Furry', image: '/avatars/furry1.png', label: 'Furry' },
-  { id: 7, style: 'Furry', image: '/avatars/furry2.png', label: 'Furry' },
-  { id: 8, style: 'Furry', image: '/avatars/furry3.png', label: 'Furry' },
-  { id: 9, style: 'Furry', image: '/avatars/furry4.png', label: 'Furry' },
-  { id: 10, style: 'Furry', image: '/avatars/furry5.png', label: 'Furry' },
+  { id: 1, style: 'Humanoid', image: '/avatars/humanoid1.png', label: 'H#001' },
+  { id: 2, style: 'Humanoid', image: '/avatars/humanoid2.png', label: 'H#002' },
+  { id: 3, style: 'Humanoid', image: '/avatars/humanoid3.png', label: 'H#003' },
+  { id: 4, style: 'Humanoid', image: '/avatars/humanoid4.png', label: 'H#004' },
+  { id: 5, style: 'Humanoid', image: '/avatars/humanoid5.png', label: 'H#005' },
+  { id: 6, style: 'Furry', image: '/avatars/furry1.png', label: 'F#001' },
+  { id: 7, style: 'Furry', image: '/avatars/furry2.png', label: 'F#002' },
+  { id: 8, style: 'Furry', image: '/avatars/furry3.png', label: 'F#003' },
+  { id: 9, style: 'Furry', image: '/avatars/furry4.png', label: 'F#004' },
+  { id: 10, style: 'Furry', image: '/avatars/furry5.png', label: 'F#005' },
 ];
 
 export default function Marketplace() {
@@ -27,8 +28,8 @@ export default function Marketplace() {
     <div className="min-h-screen bg-[#111] text-white flex flex-col items-center p-4">
       {/* Header with Search Bar */}
       <header className="w-full mb-8">
-        <div className="flex items-left bg-[#222] rounded-full px-4 py-2 shadow-lg">
-          <Search className="w-6 h-6 text-gray-400 mx-4" />
+        <div className="flex items-left bg-[#222] rounded-xl px-6 py-4 shadow-lg">
+          <Search className="w-6 h-6 text-gray-400 mr-4" />
           <input
             type="text"
             placeholder="search avatars for style or users..."
@@ -44,9 +45,9 @@ export default function Marketplace() {
         {filteredAvatars.map((avatar) => (
           <div
             key={avatar.id}
-            className="bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+            className="bg-[#222] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
           >
-            <img
+            <Image
               src={avatar.image}
               alt={`${avatar.style} avatar ${avatar.id}`}
               className="w-full h-auto object-cover"

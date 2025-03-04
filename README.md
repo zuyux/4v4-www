@@ -1,7 +1,7 @@
 # 4V4 - Web Interface
 
 ## 🚀 Introduction
-**4V4** is a **Next.js-powered web interface** designed for **creating, customizing, and exporting 3D avatars**. This dApp utilizes **Scroll zkEVM** to ensure **fast, low-cost, and scalable transactions** for minting avatars as NFTs. The application is built with **Three.js and Babylon.js** for real-time 3D rendering, offering a seamless user experience.
+**4V4** is a **Next.js-powered web interface** designed for **creating, customizing, and exporting 3D avatars**. This dApp utilizes **Scroll zkEVM** to ensure **fast, low-cost, and scalable transactions** for minting avatars as NFTs. The application is built with **Three.js (later Babylon.js)** for real-time 3D rendering, offering a seamless user experience.
 
 ## 🛠 Tech Stack
 - **Frontend**: Next.js (React + TailwindCSS)
@@ -9,7 +9,6 @@
 - **Blockchain**: Scroll zkEVM (ERC-721 NFTs)
 - **Storage**: IPFS / Arweave for 3D models and metadata
 - **Backend**: Node.js + Express
-- **Indexing**: The Graph (for NFT metadata retrieval)
 
 ## 🎨 Features
 - **3D Avatar Customization**: Edit body, clothing, accessories, and animations.
@@ -60,6 +59,8 @@ The dApp interacts with a **custom ERC-721 contract** deployed on **Scroll zkEVM
 - [ ] **UI improvements for 3D customization**
 - [ ] **Marketplace launch**
 - [ ] **Mobile support for avatar generation**
+
+Check Contracts Repository (here)[https://github.com/zuyux/4v4-contracts].
 
 ---
 💡 **Want to contribute?** Open an issue or submit a pull request!
