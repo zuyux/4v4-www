@@ -1,7 +1,7 @@
 # 4V4 - Web Interface
 
 ## 🚀 Introduction
-**4V4** is a **Next.js-powered web interface** designed for **creating, customizing, and exporting 3D avatars**. This dApp utilizes **Scroll zkEVM** to ensure **fast, low-cost, and scalable transactions** for minting avatars as NFTs. The application is built with **Three.js (later Babylon.js)** for real-time 3D rendering, offering a seamless user experience.
+**4V4** is a **Next.js-powered web interface** designed for **creating, customizing, and exporting 3D avatars**. This dApp utilizes **Scroll zkEVM** to ensure **fast, low-cost, and scalable transactions** for minting avatars as NFTs. The application is built with **Babylon.js** for real-time 3D rendering, offering a seamless user experience.
 
 ## 🛠 Tech Stack
 - **Frontend**: Next.js (React + TailwindCSS)
