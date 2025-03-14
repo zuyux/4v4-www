@@ -1,12 +1,10 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Connect from '../../wallet/connect';
-import { User } from 'lucide-react';
 
 interface NavigationProps {
     selectedStyle: string;
@@ -74,33 +72,6 @@ const Navigation: React.FC<NavigationProps> = ({ onMenuSelect, onModelUpload }) 
                             Explore
                         </Link>
                     </div>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="relative border border-1 border-gray-500 rounded-full h-9 w-9 p-0">
-                                <Avatar className="h-9 w-9">
-                                    <AvatarImage src="/vercel.svg" alt="User Avatar" />
-                                    <AvatarFallback><User/></AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 p-2">
-                            <DropdownMenuItem asChild>
-                                <Link href="/examples/dashboard" className="w-full px-2 py-1 rounded-md hover:bg-accent">
-                                    Profile
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/examples/settings" className="w-full px-2 py-1 rounded-md hover:bg-accent">
-                                    Settings
-                                </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                                <Link href="/auth/login" className="w-full px-2 py-1 rounded-md hover:bg-accent">
-                                    Logout
-                                </Link>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
                     <Connect />
                 </div>
             </div>
