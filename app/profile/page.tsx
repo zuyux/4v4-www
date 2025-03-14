@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import Image from 'next/image';
@@ -15,7 +16,7 @@ const avatars = [
   { id: 10, style: 'Furry', image: '/avatars/furry5.png', label: 'F#005' },
 ];
 
-export default function Marketplace() {
+export default function Profile() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filter avatars based on search term
