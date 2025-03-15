@@ -1,21 +1,23 @@
-// pages/minted/[address].tsx
 'use client';
 
-// Import necessary dependencies
 import { useState, useEffect, useCallback } from 'react';
-import Navigation from '@/app/components/features/navigation/Navigation';
+import Link from 'next/link';
+import Navigation from '@/app/components/features/navigation/MintedNav';
 import ErrorMessage from '@/app/components/features/common/ErrorMessage';
 import AvatarPanel from '@/components/AvatarPanel';
-import FloatingPanel from '@/app/components/features/avatar/FloatingPanel';
-import ModalInfo from '@/app/components/features/common/ModalInfo';
 import Modal from 'react-modal';
 import 'babylonjs-loaders';
 import { useSDK } from "@metamask/sdk-react"; 
-import { useRouter } from 'next/navigation'; 
-import MintModal from '@/app/components/features/avatar/MintModal'; 
+import { useRouter, useParams } from 'next/navigation'; 
+import { getTokenMetadata, convertIpfsUrl } from '@/utils/contract/avatarMinter';
+import {Info} from 'lucide-react';
 
-export default function MintedPage(address: string) {
-  const mintedAddress = address;
+export default function MintedPage() {
+  // Get the token ID from the URL
+  const params = useParams();
+  const tokenId = params?.address as string;
+  
+  const [mintedAddress, setMintedAddress] = useState<string>(tokenId || '');
   const [selectedStyle, setSelectedStyle] = useState<string>('low-poly');
   const [color, setColor] = useState<string>('#ffffff');
   const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');
@@ -24,11 +26,13 @@ export default function MintedPage(address: string) {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isMintModalOpen, setIsMintModalOpen] = useState<boolean>(false); 
-  const { connected } = useSDK();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { connected, provider } = useSDK();
   const route = useRouter(); 
 
   const [modelUrl, setModelUrl] = useState<string | null>(null);
-  const [lightIntensity] = useState<number>(11); 
+  const [lightIntensity] = useState<number>(11);
+  const [metadata, setMetadata] = useState<any>(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -36,13 +40,28 @@ export default function MintedPage(address: string) {
     if (savedTexture) {
       setTexture(savedTexture);
     }
-  },);
+
+    // Fetch metadata for the minted token
+    const fetchMetadata = async () => {
+      if (mintedAddress) {
+        const data = await getTokenMetadata(mintedAddress, provider);
+        if (data) {
+          setMetadata(data);
+          // Assuming the model URL is in the animation_url field of the metadata
+          setModelUrl(convertIpfsUrl(data.animation_url));
+        } else {
+          setErrorMessage("Failed to fetch metadata.");
+        }
+      }
+    };
+    fetchMetadata();
+  }, [mintedAddress, provider]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       Modal.setAppElement('#__next');
     }
-  },);
+  }, []);
 
   const handleMint = async () => {
     console.log('Mint button clicked in FloatingPanel'); // Add this line
@@ -75,7 +94,6 @@ export default function MintedPage(address: string) {
     }
   },[]);
 
-
   const handleBackground = (bg: string) => setBackground(bg);
   const handleShare = () => alert('Share functionality TBD');
   const handleUpload = () => alert('Download functionality TBD');
@@ -98,7 +116,7 @@ export default function MintedPage(address: string) {
 
   return (
     <div className="h-screen bg-white text-black m-0 p-0 overflow-hidden" id="__next">
-      <Navigation selectedStyle={selectedStyle} onMenuSelect={handleMenuSelect} onModelUpload={handleModelUpload} />
+      <Navigation />
       <ErrorMessage message={errorMessage} onDismiss={() => setErrorMessage('')} />
       <div className="flex flex-row h-screen">
         <AvatarPanel
@@ -110,24 +128,12 @@ export default function MintedPage(address: string) {
           modelUrl={modelUrl}
           lightIntensity={lightIntensity}
         />
-        <FloatingPanel
-          color={color}
-          secondaryColor={secondaryColor}
-          onColorChange={handleColorChange}
-          onSecondaryColorChange={handleSecondaryColorChange}
-          texture={texture}
-          background={background}
-          onTextureUpload={handleTextureUpload}
-          onBackgroundChange={handleBackground}
-          onShare={handleShare}
-          onModelUpload={handleUpload}
-          onMint={handleMint} 
-          onReset={handleReset}
-          onInfo={openModal}
-        />
       </div>
-      <ModalInfo isOpen={isModalOpen} onClose={closeModal} />
-      <MintModal isOpen={isMintModalOpen} onClose={closeMintModal} />
+      <div className='fixed bottom-4 left-4'>
+        <Link href="#">
+          <Info/>
+        </Link>
+      </div>
     </div>
   );
 }

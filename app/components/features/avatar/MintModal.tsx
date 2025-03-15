@@ -136,7 +136,7 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
         await tx.wait();
         alert('Avatar minted successfully! Transaction Hash: ' + tx.hash);
         // onClose();
-        router.push('/minted');
+        router.push('/minted/'+tx.hash);
       } catch (e: unknown) {
         if (e instanceof Error) {
           console.error("Error:", e.message);
@@ -257,7 +257,8 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
 
           <div className="mb-4">
             <Label htmlFor="customizationData">Customization Data (Optional, JSON)</Label>
-            <textarea
+            <Input
+              type="text"
               id="customizationData"
               value={customizationData}
               onChange={(e) => setCustomizationData(e.target.value)}
