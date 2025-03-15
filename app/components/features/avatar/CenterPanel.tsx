@@ -7,8 +7,6 @@ import 'babylonjs-loaders';
 import { GridMaterial } from 'babylonjs-materials'; // Import GridMaterial directly - NEW IMPORT
 
 interface CenterPanelProps {
-    color: string;
-    texture: string;
     background: string;
     secondaryColor: string;
     modelUrl?: string | null;
@@ -16,7 +14,7 @@ interface CenterPanelProps {
 }
 
 export default function CenterPanel({
-    color, background, secondaryColor, texture,
+    background, secondaryColor,
     modelUrl, lightIntensity // Receive lightIntensity prop
 }: CenterPanelProps) {
     const mountRef = useRef<HTMLCanvasElement>(null);
@@ -240,13 +238,7 @@ export default function CenterPanel({
             }
             engine.dispose();
         };
-    }, [background, secondaryColor, color, texture, modelUrl, lightIntensity]); // Added lightIntensity to dependency array
-
-    useEffect(() => {
-        if (meshMaterial) {
-            meshMaterial.diffuseColor = BABYLON.Color3.FromHexString(color);
-        }
-    }, [color, meshMaterial]);
+    }, [background, secondaryColor, modelUrl, lightIntensity]); // Added lightIntensity to dependency array
 
     useEffect(() => {
         if (modelRef.current && isDragging) {

@@ -30,34 +30,13 @@ export default function FloatingPanel({
         <aside className="fixed top-20 left-5 w-[220px] bg-transparent p-4 flex flex-col space-y-4 bg-white/50 rounded-xl backdrop-blur-lg transition-all shadow-sm">
             {/* Color Inputs */}
             <div>
-                <Label htmlFor="colorPicker">Primary Color</Label>
-                <Input
-                    id="colorPicker"
-                    type="color"
-                    value={color}
-                    onChange={(e) => onColorChange(e.target.value)}
-                    className="w-full h-10 rounded cursor-pointer"
-                />
-            </div>
-            <div>
-                <Label htmlFor="secondaryColorPicker">Secondary Color</Label>
+                <Label htmlFor="secondaryColorPicker">Lighting:</Label>
                 <Input
                     id="secondaryColorPicker"
                     type="color"
                     value={secondaryColor}
                     onChange={(e) => onSecondaryColorChange(e.target.value)}
                     className="w-full h-10 rounded cursor-pointer"
-                />
-            </div>
-
-            {/* Texture Upload */}
-            <div>
-                <Label>Textures</Label>
-                <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={onTextureUpload}
-                    className="mb-2"
                 />
             </div>
 

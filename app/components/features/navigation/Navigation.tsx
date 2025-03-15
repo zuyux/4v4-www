@@ -24,45 +24,15 @@ const Navigation: React.FC<NavigationProps> = ({ onMenuSelect, onModelUpload }) 
     ];
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 border-b border-border backdrop-blur-lg transition-all shadow-sm">
+        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all shadow-md">
             <div className="container flex items-center justify-between h-16 px-6">
-                {/* Style Selection Dropdown */}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="bg-[#f5f5f5] px-4 py-2 rounded-md font-medium">
-                            Mod <span className="ml-1">▼</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 p-2 **bg-white**"> {/* Added bg-white to DropdownMenuContent */}
-                        {navigationStyles.map((item) => (
-                            <DropdownMenuItem
-                                key={item.style}
-                                className="cursor-pointer px-2 py-1 rounded-md hover:bg-accent **bg-white**" // Added bg-white to DropdownMenuItem
-                                onSelect={() => onMenuSelect(item.style)}
-                            >
-                                {item.title}
-                            </DropdownMenuItem>
-                        ))}
-                        <DropdownMenuItem className="flex items-center justify-between mt-2 border-t pt-2 bg-white"> {/* Added bg-white to "Upload Model" item too, for consistency */}
-                            <Label htmlFor="modelUpload" className="cursor-pointer w-full">
-                                Upload .glb Model
-                            </Label>
-                            <Input
-                                type="file"
-                                id="modelUpload"
-                                accept=".glb"
-                                onChange={onModelUpload}
-                                className="hidden"
-                            />
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-
+                <div className='text-white items-center ml-0 font-bold bg-[#181818] px-4 py-2 rounded-md transition-colors'>
+                    <Link href="/app">4v4</Link>
+                </div>
                 {/* User & Wallet Actions */}
                 <div className="fixed right-0 flex items-center space-x-4 mr-4">
                     <div className='grid grid-cols-3 text-sm font-semibold text-center space-x-4'>
-                        <Link href="/" className='bg-[#f5f5f5] px-4 py-2 rounded-md transition-colors'>
+                        <Link href="/create" className='bg-[#f5f5f5] px-4 py-2 rounded-md transition-colors'>
                             Create
                         </Link>
                         <Link href="/mint" className='bg-[#f5f5f5] px-4 py-2 rounded-md transition-colors'>

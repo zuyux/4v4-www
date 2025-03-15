@@ -1,12 +1,12 @@
 import '@/app/globals.css';
-import ClientLayout from '@/app/ClientLayout';
+import { MetaMaskProvider } from '@metamask/sdk-react'; 
 
 export default function App({ Component, pageProps }) {
   return (
-    <ClientLayout>
+    <MetaMaskProvider>
       <main>
         <Component {...pageProps} />
       </main>
-    </ClientLayout>
+    </MetaMaskProvider>
   );
 }

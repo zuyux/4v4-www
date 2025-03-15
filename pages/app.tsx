@@ -101,8 +101,6 @@ export default function AppPage() {
       <ErrorMessage message={errorMessage} onDismiss={() => setErrorMessage('')} />
       <div className="flex flex-row h-screen">
         <CenterPanel
-          color={color}
-          texture={texture}
           background={background}
           secondaryColor={secondaryColor}
           modelUrl={modelUrl}
