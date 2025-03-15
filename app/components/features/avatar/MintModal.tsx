@@ -11,6 +11,8 @@ import { ethers } from 'ethers';
 import AvatarMinterABI from '@/app/abi/AvatarMinterABI.json';
 import { useRouter } from 'next/navigation';
 
+import CenterPanel from './CenterPanel';
+
 interface MintModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -35,32 +37,41 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
   const [transactionHash, setTransactionHash] = useState<string>('');
   const [error, setError] = useState<string>('');
   const { sdk, account } = useSDK();
+  const [color, setColor] = useState<string>('#ffffff');
+  const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');
+  const [texture, setTexture] = useState<string>('default');
+  const [background, setBackground] = useState<string>('#f5f5f5');
+  const [modelUrl, setModelUrl] = useState<string | null>(null);
+  const [lightIntensity] = useState<number>(11); 
+
   const router = useRouter();
 
-  const contractAddress = 'YOUR_CONTRACT_ADDRESS';
+  const contractAddress = "0x02EF301d55F89564b617419f32C5862BA7a98c3b";
   const contractABI = AvatarMinterABI.abi;
 
   const handleModelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setModelFile(e.target.files[0]);
+    const file = e.target.files?.[0];
+    if (file) {
+      setModelFile(file);
     }
-  };
+  };  
 
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setImageFile(e.target.files[0]);
+    const image = e.target.files?.[0];
+    if (image) {
+      setModelFile(image);
     }
   };
 
   const handleMint = async () => {
     if (!sdk || !account) {
-      setError("Please connect your wallet.");
-      return;
+        setError("Please connect your wallet.");
+        return;
     }
 
     if (!name || !description || !modelFile) {
-      setError("Please fill in all the essential information and upload your model.");
-      return;
+        setError("Please fill in all the essential information and upload your model.");
+        return;
     }
 
     setMinting(true);
@@ -68,56 +79,73 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
     setTransactionHash('');
 
     try {
-      const formData = new FormData();
-      formData.append('file', modelFile); // Use 'file' as the key for the model file [cite: 16, 24]
-      if (imageFile) {
-        formData.append('imageFile', imageFile);
-      }
-      formData.append('name', name);
-      formData.append('description', description);
-      formData.append('externalUrl', externalUrl);
-      formData.append('attributes', JSON.stringify(attributes ? attributes.split(',').map(attr => ({ trait_type: attr.trim() })) :[]));
-      formData.append('interoperabilityFormats', JSON.stringify(interoperabilityFormats ? interoperabilityFormats.split(',').map(format => format.trim()) :[]));
-      formData.append('customizationData', customizationData);
-      formData.append('edition', edition);
-      formData.append('royalties', royalties);
-      formData.append('properties', properties);
-      formData.append('location', location);
-      formData.append('soulbound', soulbound.toString());
+        const formData = new FormData();
+        formData.append('file', modelFile);
+        if (imageFile) {
+            formData.append('imageFile', imageFile);
+        }
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('externalUrl', externalUrl);
+        formData.append('attributes', JSON.stringify(attributes ? attributes.split(',').map(attr => ({ trait_type: attr.trim() })) :[]));
+        formData.append('interoperabilityFormats', JSON.stringify(interoperabilityFormats ? interoperabilityFormats.split(',').map(format => format.trim()) :[]));
+        formData.append('customizationData', customizationData);
+        formData.append('edition', edition);
+        formData.append('royalties', royalties);
+        formData.append('properties', properties);
+        formData.append('location', location);
+        formData.append('soulbound', soulbound.toString());
 
-      const uploadRequest = await fetch("/api/files", { // Use "/api/files" endpoint [cite: 16, 21]
-        method: "POST",
-        body: formData,
-      });
+        const uploadRequest = await fetch("/api/files", {
+            method: "POST",
+            body: formData,
+        });
 
-      if (!uploadRequest.ok) {
-        alert("Trouble uploading file");
-        throw new Error("Failed to upload file");
-      }
+        if (!uploadRequest.ok) {
+            const errorData = await uploadRequest.json();
+            const errorMessage = errorData.error || "Failed to upload file"; 
+            setError(errorMessage); 
+            throw new Error(errorMessage);
+        }
 
-      const signedUrl = await uploadRequest.json(); // Get the URL from the response [cite: 16]
-      setTokenURI(signedUrl.url); // Assuming the response has a 'url' property [cite: 25, 28]
+        const signedUrl = await uploadRequest.json();
+        console.log("Signed URL:", signedUrl);
+        const tokenURI = signedUrl.tokenURI; 
 
-      const provider = new ethers.BrowserProvider(window.ethereum as any);
-      const signer = await provider.getSigner(account);
-      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+        console.log("Token URI:", tokenURI);
 
-      const mintingPrice = await contract.mintPrice();
-      const tx = await contract.mintAvatar(account, tokenURI, soulbound, {
-        value: mintingPrice,
-      });
+        setTokenURI(tokenURI);
 
-      setTransactionHash(tx.hash);
-      await tx.wait();
-      alert('Avatar minted successfully! Transaction Hash: ' + tx.hash);
-      onClose();
-      router.push('/minted');
-    } catch (e: any) {
-      console.error(e);
-      setError(e.message || "Trouble uploading file");
-    } finally {
-      setMinting(false);
-    }
+        if (!window.ethereum) {
+          setError("Metamask is not available");
+          alert("Metamask is not available");
+          return;
+        }        
+
+        const provider = new ethers.BrowserProvider(window.ethereum as any);
+
+        const signer = await provider.getSigner(account);
+        const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        const mintingPrice = await contract.mintPrice();
+        const tx = await contract.mintAvatar(account, tokenURI, soulbound, {
+            value: mintingPrice,
+        });
+
+        setTransactionHash(tx.hash);
+        await tx.wait();
+        alert('Avatar minted successfully! Transaction Hash: ' + tx.hash);
+        // onClose();
+        router.push('/minted');
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          console.error("Error:", e.message);
+          setError(e.message);
+        } else {
+          console.error("Unknown error:", e);
+          setError("An unexpected error occurred.");
+        }
+      }      
   };
 
   return (
@@ -125,162 +153,185 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Mint Avatar Modal"
-      className="modal"
+      className="modal max-h-2/3 overflow-y-auto"
       overlayClassName="modal-overlay"
+      style={{
+        content: {
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '16px',
+          padding: '24px',
+        },
+      }}
     >
-      <h2 className="text-lg font-semibold mb-4">Mint Your Avatar</h2>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      {transactionHash && <p className="text-green-500 mb-2">Transaction Hash: {transactionHash}</p>}
-
-      <div className="mb-4">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Avatar Name"
+      <div>
+        <CenterPanel
+          color={color}
+          texture={texture}
+          background={background}
+          secondaryColor={secondaryColor}
+          modelUrl={modelUrl}
+          lightIntensity={lightIntensity}
         />
       </div>
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Mint Your Avatar</h2>
+        {error && <p className="text-red-500 mb-2">{error}</p>}
+        {transactionHash && <p className="text-green-500 mb-2">Transaction Hash: {transactionHash}</p>}
 
-      <div className="mb-4">
-        <Label htmlFor="description">Description</Label>
-        <Input
-          type="text"
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Avatar Description"
-        />
-      </div>
+        <div className="mb-4">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Avatar Name"
+          />
+        </div>
 
-      <div className="mb-4">
-        <Label htmlFor="modelFile">Upload 3D Model (.glb)</Label>
-        <Input
-          type="file"
-          id="modelFile"
-          accept=".glb,.gltf"
-          onChange={handleModelFileChange}
-        />
-      </div>
+        <div className="mb-4">
+          <Label htmlFor="description">Description</Label>
+          <Input
+            type="text"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Avatar Description"
+          />
+        </div>
 
-      <div className="mb-4">
-        <Label htmlFor="imageFile">Upload Image (Optional)</Label>
-        <Input
-          type="file"
-          id="imageFile"
-          accept="image/*"
-          onChange={handleImageFileChange}
-        />
-      </div>
+        <div className="mb-4">
+          <Label htmlFor="modelFile">Upload 3D Model (.glb)</Label>
+          <Input
+            type="file"
+            id="modelFile"
+            accept=".glb,.gltf"
+            onChange={handleModelFileChange}
+          />
+        </div>
 
-      <div className="mb-4">
-        <Label htmlFor="externalUrl">External URL (Optional)</Label>
-        <Input
-          type="text"
-          id="externalUrl"
-          value={externalUrl}
-          onChange={(e) => setExternalUrl(e.target.value)}
-          placeholder="https://example.com"
-        />
-      </div>
+        <div className="mb-4">
+          <Label htmlFor="imageFile">Upload Image (Optional)</Label>
+          <Input
+            type="file"
+            id="imageFile"
+            accept="image/*"
+            onChange={handleImageFileChange}
+          />
+        </div>
 
-      <div className="mb-4">
-        <Label htmlFor="attributes">Attributes (Optional, comma-separated)</Label>
-        <Input
-          type="text"
-          id="attributes"
-          value={attributes}
-          onChange={(e) => setAttributes(e.target.value)}
-          placeholder="e.g., style: futuristic, rarity: Rare"
-        />
-      </div>
+        <div className="mb-4">
+          <Label htmlFor="externalUrl">External URL (Optional)</Label>
+          <Input
+            type="text"
+            id="externalUrl"
+            value={externalUrl}
+            onChange={(e) => setExternalUrl(e.target.value)}
+            placeholder="https://example.com"
+          />
+        </div>
+        <div className='grid grid-cols-2 space-x-4'>
+          <div>
+          <div className="mb-4">
+            <Label htmlFor="attributes">Attributes (Optional, comma-separated)</Label>
+            <Input
+              type="text"
+              id="attributes"
+              value={attributes}
+              onChange={(e) => setAttributes(e.target.value)}
+              placeholder="e.g., style: futuristic, rarity: Rare"
+            />
+          </div>
 
-      <div className="mb-4">
-        <Label htmlFor="interoperabilityFormats">Interoperability Formats (Optional, comma-separated)</Label>
-        <Input
-          type="text"
-          id="interoperabilityFormats"
-          value={interoperabilityFormats}
-          onChange={(e) => setInteroperabilityFormats(e.target.value)}
-          placeholder="e.g., glb, fbx"
-        />
-      </div>
+          <div className="mb-4">
+            <Label htmlFor="interoperabilityFormats">Interoperability Formats (Optional, comma-separated)</Label>
+            <Input
+              type="text"
+              id="interoperabilityFormats"
+              value={interoperabilityFormats}
+              onChange={(e) => setInteroperabilityFormats(e.target.value)}
+              placeholder="e.g., glb, fbx"
+            />
+          </div>
 
-      <div className="mb-4">
-        <Label htmlFor="customizationData">Customization Data (Optional, JSON)</Label>
-        <Input
-          type="textarea"
-          id="customizationData"
-          value={customizationData}
-          onChange={(e) => setCustomizationData(e.target.value)}
-          placeholder='e.g., {"color": "blue", "accessory": "hat"}'
-        />
-      </div>
+          <div className="mb-4">
+            <Label htmlFor="customizationData">Customization Data (Optional, JSON)</Label>
+            <textarea
+              id="customizationData"
+              value={customizationData}
+              onChange={(e) => setCustomizationData(e.target.value)}
+              placeholder='e.g., {"color": "blue", "accessory": "hat"}'
+            />
+          </div>
 
-      <div className="mb-4">
-        <Label htmlFor="edition">Edition (Optional)</Label>
-        <Input
-          type="text"
-          id="edition"
-          value={edition}
-          onChange={(e) => setEdition(e.target.value)}
-          placeholder="e.g., 100"
-        />
-      </div>
+          <div className="mb-4">
+            <Label htmlFor="edition">Edition (Optional)</Label>
+            <Input
+              type="text"
+              id="edition"
+              value={edition}
+              onChange={(e) => setEdition(e.target.value)}
+              placeholder="e.g., 100"
+            />
+          </div>
+          </div>
+          <div>
+          <div className="mb-4">
+            <Label htmlFor="royalties">Royalties (Optional)</Label>
+            <Input
+              type="text"
+              id="royalties"
+              value={royalties}
+              onChange={(e) => setRoyalties(e.target.value)}
+              placeholder="e.g., 10%"
+            />
+          </div>
 
-      <div className="mb-4">
-        <Label htmlFor="royalties">Royalties (Optional)</Label>
-        <Input
-          type="text"
-          id="royalties"
-          value={royalties}
-          onChange={(e) => setRoyalties(e.target.value)}
-          placeholder="e.g., 10%"
-        />
-      </div>
+          <div className="mb-4">
+            <Label htmlFor="properties">Properties (Optional, JSON)</Label>
+            <Input
+              type="textarea"
+              id="properties"
+              value={properties}
+              onChange={(e) => setProperties(e.target.value)}
+              placeholder='e.g., {"polygonCount": 5000}'
+            />
+          </div>
 
-      <div className="mb-4">
-        <Label htmlFor="properties">Properties (Optional, JSON)</Label>
-        <Input
-          type="textarea"
-          id="properties"
-          value={properties}
-          onChange={(e) => setProperties(e.target.value)}
-          placeholder='e.g., {"polygonCount": 5000}'
-        />
-      </div>
+          <div className="mb-4">
+            <Label htmlFor="location">Location (Optional, comma-separated)</Label>
+            <Input
+              type="text"
+              id="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="e.g., lat: -12.72596, lon: -77.89962"
+            />
+          </div>
 
-      <div className="mb-4">
-        <Label htmlFor="location">Location (Optional, comma-separated)</Label>
-        <Input
-          type="text"
-          id="location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="e.g., lat: -12.72596, lon: -77.89962"
-        />
+          <div className="my-10">
+            <input
+              type="checkbox"
+              id="soulbound"
+              checked={soulbound}
+              onChange={(e) => setSoulbound(e.target.checked)}
+              className="mr-2"
+            />
+            <Label htmlFor="soulbound">Soulbound (Non-transferable)</Label>
+          </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <Button type="button" variant="outline" onClick={onClose} className="mr-2">
+            Cancel
+          </Button>
+          <Button onClick={handleMint} disabled={minting}>
+            {minting ? 'Minting...' : 'Mint Avatar'}
+          </Button>
+        </div>
       </div>
-
-      <div className="mb-4 flex items-center">
-        <input
-          type="checkbox"
-          id="soulbound"
-          checked={soulbound}
-          onChange={(e) => setSoulbound(e.target.checked)}
-          className="mr-2"
-        />
-        <Label htmlFor="soulbound">Soulbound (Non-transferable)</Label>
-      </div>
-
-      <div className="flex justify-end">
-        <Button type="button" variant="outline" onClick={onClose} className="mr-2">
-          Cancel
-        </Button>
-        <Button onClick={handleMint} disabled={minting}>
-          {minting ? 'Minting...' : 'Mint Avatar'}
-        </Button>
-      </div>
+      
     </Modal>
   );
 };

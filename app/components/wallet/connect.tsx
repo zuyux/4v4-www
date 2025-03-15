@@ -1,4 +1,3 @@
-//wallet/connect.tsx
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -34,9 +33,9 @@ export default function Connect() {
                 console.debug('Connected accounts:', accounts);
                 // The useSDK hook should automatically update the 'connected' and 'account' states
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Failed to connect:', err);
-            setError(err.message || 'Failed to connect to MetaMask.');
+            setError((err instanceof Error) ? err.message : 'Failed to connect to MetaMask.');
         } finally {
             setConnecting(false);
         }

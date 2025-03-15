@@ -1,20 +1,21 @@
-// app/page.tsx
+// pages/minted/[address].tsx
 'use client';
 
 // Import necessary dependencies
 import { useState, useEffect, useCallback } from 'react';
-import Navigation from './components/features/navigation/Navigation';
-import ErrorMessage from './components/features/common/ErrorMessage';
-import CenterPanel from './components/features/avatar/CenterPanel';
-import FloatingPanel from './components/features/avatar/FloatingPanel';
-import ModalInfo from './components/features/common/ModalInfo';
+import Navigation from '@/app/components/features/navigation/Navigation';
+import ErrorMessage from '@/app/components/features/common/ErrorMessage';
+import AvatarPanel from '@/components/AvatarPanel';
+import FloatingPanel from '@/app/components/features/avatar/FloatingPanel';
+import ModalInfo from '@/app/components/features/common/ModalInfo';
 import Modal from 'react-modal';
 import 'babylonjs-loaders';
 import { useSDK } from "@metamask/sdk-react"; 
 import { useRouter } from 'next/navigation'; 
-import MintModal from './components/features/avatar/MintModal'; 
+import MintModal from '@/app/components/features/avatar/MintModal'; 
 
-export default function MainPage() {
+export default function MintedPage(address: string) {
+  const mintedAddress = address;
   const [selectedStyle, setSelectedStyle] = useState<string>('low-poly');
   const [color, setColor] = useState<string>('#ffffff');
   const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');
@@ -100,7 +101,8 @@ export default function MainPage() {
       <Navigation selectedStyle={selectedStyle} onMenuSelect={handleMenuSelect} onModelUpload={handleModelUpload} />
       <ErrorMessage message={errorMessage} onDismiss={() => setErrorMessage('')} />
       <div className="flex flex-row h-screen">
-        <CenterPanel
+        <AvatarPanel
+          mintedAddress={mintedAddress}
           color={color}
           texture={texture}
           background={background}

@@ -1,17 +1,17 @@
 'use client';
 
-import { Share2, Download, Save, RefreshCw, Info } from 'lucide-react';
+import { Share2, Upload, Save, Info } from 'lucide-react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-interface RightPanelProps {
+interface FloatingPanelProps {
     texture: string;
     background: string;
     onTextureUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onBackgroundChange: (color: string) => void;
     onShare: () => void;
-    onDownload: () => void;
+    onModelUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onMint: () => void;
     onReset: () => void;
     onInfo: () => void;
@@ -24,8 +24,8 @@ interface RightPanelProps {
 export default function FloatingPanel({
     color, secondaryColor, onColorChange, onSecondaryColorChange,
     background, onTextureUpload,
-    onBackgroundChange, onShare, onDownload, onMint, onReset, onInfo
-}: RightPanelProps) {
+    onBackgroundChange, onShare, onModelUpload, onMint, onInfo
+}: FloatingPanelProps) {
     return (
         <aside className="fixed top-20 left-5 w-[220px] bg-transparent p-4 flex flex-col space-y-4 bg-white/50 rounded-xl backdrop-blur-lg transition-all shadow-sm">
             {/* Color Inputs */}
@@ -75,17 +75,24 @@ export default function FloatingPanel({
 
             {/* Action Buttons */}
             <div className="flex flex-col space-y-2">
+                <Button variant="outline" onClick={() => document.getElementById('modelUpload')?.click()}>
+                    <Upload className="mr-2" />
+                    <Label htmlFor="modelUpload" className="cursor-pointer w-full">
+                        Upload
+                    </Label>
+                    <Input
+                        type="file"
+                        id="modelUpload"
+                        accept=".glb"
+                        onChange={onModelUpload}
+                        className="hidden"
+                    />
+                </Button>
                 <Button onClick={onMint}>
                     <Save className="mr-2" /> Mint
                 </Button>
                 <Button onClick={onShare}>
                     <Share2 className="mr-2" /> Share
-                </Button>
-                <Button variant="outline" onClick={onDownload}>
-                    <Download className="mr-2" /> Download
-                </Button>
-                <Button variant="outline" onClick={onReset}>
-                    <RefreshCw className="mr-2" /> Reset
                 </Button>
                 <Button variant="outline" onClick={onInfo}>
                     <Info className="mr-2" /> Info
