@@ -22,7 +22,7 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [modelFile, setModelFile] = useState<File | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile] = useState<File | null>(null);
   const [externalUrl, setExternalUrl] = useState<string>('');
   const [attributes, setAttributes] = useState<string>('');
   const [interoperabilityFormats, setInteroperabilityFormats] = useState<string>('');
@@ -37,11 +37,11 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
   const [transactionHash, setTransactionHash] = useState<string>('');
   const [error, setError] = useState<string>('');
   const { sdk, account } = useSDK();
-  const [color, setColor] = useState<string>('#ffffff');
-  const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');
-  const [texture, setTexture] = useState<string>('default');
-  const [background, setBackground] = useState<string>('#f5f5f5');
-  const [modelUrl, setModelUrl] = useState<string | null>(null);
+  const [color] = useState<string>('#ffffff');
+  const [secondaryColor] = useState<string>('#ffffff');
+  const [texture] = useState<string>('default');
+  const [background] = useState<string>('#f5f5f5');
+  const [modelUrl] = useState<string | null>(null);
   const [lightIntensity] = useState<number>(11); 
 
   const router = useRouter();
