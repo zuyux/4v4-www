@@ -1,9 +1,12 @@
 import '@/app/globals.css';
+import ClientLayout from '@/app/ClientLayout';
 
 export default function App({ Component, pageProps }) {
   return (
-    <main>
-      <Component {...pageProps} />
-    </main>
+    <ClientLayout>
+      <main>
+        <Component {...pageProps} />
+      </main>
+    </ClientLayout>
   );
 }

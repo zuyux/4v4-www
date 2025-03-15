@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User, LogOut } from 'lucide-react';
-import { shortenAddress } from "@/utils/addressUtils";
 
 export default function Connect() {
     const { sdk, connected, account } = useSDK();
@@ -65,33 +64,25 @@ export default function Connect() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="relative border border-1 border-gray-500 rounded-full h-9 w-9 p-0 mr-4">
-                            <Avatar className="h-9 w-9">
+                            <Avatar className="h-9 w-9 text-black">
                                 <AvatarFallback><User/></AvatarFallback>
                             </Avatar>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 p-2">
+                    <DropdownMenuContent className="w-100 p-2">
                         <DropdownMenuItem asChild>
-                            <span className='text-sm'>{account && shortenAddress(account)}</span> 
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            <Link href="/examples/dashboard" className="w-full px-2 py-1 rounded-md hover:bg-accent">
+                            <Link href={`/${account}`} className="w-full px-2 py-1 rounded-md hover:bg-accent cursor-pointer">
                                 Profile
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
-                            <Link href="/examples/settings" className="w-full px-2 py-1 rounded-md hover:bg-accent">
+                            <Link href={`/${account}/settings`} className="w-full px-2 py-1 rounded-md hover:bg-accent cursor-pointer">
                                 Settings
-                            </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                            <Link href="/auth/login" className="w-full px-2 py-1 rounded-md hover:bg-accent">
-                                Logout
                             </Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button onClick={handleDisconnect}><LogOut/></Button>
+                <Button onClick={handleDisconnect} className='border border-1 border-white'><LogOut/></Button>
             </div>
         );
     }
@@ -99,7 +90,7 @@ export default function Connect() {
     return (
         <div>
             {error && <p className="text-red-500 mb-2">{error}</p>}
-            <Button onClick={handleConnect} disabled={connecting}>
+            <Button onClick={handleConnect} disabled={connecting} className='border border-1 border-white'>
                 {connecting ? "Connecting..." : "Connect"}
             </Button>
         </div>
