@@ -24,7 +24,7 @@ export default function FloatingPanel({
     onBackgroundChange, onShare, onModelUpload, onMint, onInfo
 }: FloatingPanelProps) {
     return (
-        <aside className="fixed top-20 left-5 w-[220px] bg-transparent p-4 flex flex-col space-y-4 bg-white/50 rounded-xl backdrop-blur-lg transition-all shadow-sm">
+        <aside className="fixed top-20 left-5 w-[180px] bg-transparent p-4 flex flex-col space-y-4 bg-white/50 rounded-xl backdrop-blur-lg transition-all shadow-sm">
             {/* Color Inputs */}
             <div>
                 <Label htmlFor="secondaryColorPicker">Lighting:</Label>
@@ -51,7 +51,7 @@ export default function FloatingPanel({
 
             {/* Action Buttons */}
             <div className="flex flex-col space-y-2">
-                <Button variant="outline" onClick={() => document.getElementById('modelUpload')?.click()}>
+                <Button variant="outline">
                     <Upload className="mr-2" />
                     <Label htmlFor="modelUpload" className="cursor-pointer w-full">
                         Upload
@@ -65,13 +65,16 @@ export default function FloatingPanel({
                     />
                 </Button>
                 <Button onClick={onMint}>
-                    <Save className="mr-2" /> Mint
+                    <Save className="mr-2" /> 
+                    <Label className='w-full'>Mint</Label>
                 </Button>
                 <Button onClick={onShare}>
-                    <Share2 className="mr-2" /> Share
+                    <Share2 className="mr-2" />
+                    <Label className='w-full'>Share</Label>
                 </Button>
                 <Button variant="outline" onClick={onInfo}>
-                    <Info className="mr-2" /> Info
+                    <Info className="mr-2" />
+                    <Label className='w-full'>Info</Label>
                 </Button>
             </div>
         </aside>

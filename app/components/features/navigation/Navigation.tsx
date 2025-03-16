@@ -1,28 +1,12 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Connect from '../../wallet/connect';
 
 interface NavigationProps {
-    selectedStyle: string;
-    onMenuSelect: (item: string) => void;
-    onModelUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onMenuSelect, onModelUpload }) => {
-    const navigationStyles = [
-        { title: 'Low Poly', style: 'low-poly' },
-        { title: 'Med Poly', style: 'med-poly' },
-        { title: 'High Poly', style: 'high-poly' },
-        { title: 'Anime', style: 'anime' },
-        { title: 'Fantastic', style: 'fantastic' },
-        { title: 'Realistic', style: 'realistic' },
-        { title: 'Sketched', style: 'sketched' },
-    ];
-
+const Navigation: React.FC<NavigationProps> = ({}) => {
     return (
         <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg transition-all shadow-md">
             <div className="container flex items-center justify-between h-16 px-6">

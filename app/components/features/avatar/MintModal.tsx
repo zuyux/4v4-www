@@ -1,7 +1,7 @@
 // app/components/features/avatar/MintModal.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,8 @@ import AvatarMinterABI from '@/app/abi/AvatarMinterABI.json';
 import { useRouter } from 'next/navigation';
 
 import CenterPanel from './CenterPanel';
+
+import { openDB, saveModelToDB, getModelFromDB } from '@/utils/IDB'; 
 
 interface MintModalProps {
   isOpen: boolean;
@@ -37,11 +39,9 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
   const [transactionHash, setTransactionHash] = useState<string>('');
   const [error, setError] = useState<string>('');
   const { sdk, account } = useSDK();
-  const [color] = useState<string>('#ffffff');
   const [secondaryColor] = useState<string>('#ffffff');
-  const [texture] = useState<string>('default');
   const [background] = useState<string>('#f5f5f5');
-  const [modelUrl] = useState<string | null>(null);
+  const [modelUrl, setModelUrl] = useState<string | null>("/models/default.glb");
   const [lightIntensity] = useState<number>(11); 
 
   const router = useRouter();
@@ -49,12 +49,37 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
   const contractAddress = "0x02EF301d55F89564b617419f32C5862BA7a98c3b";
   const contractABI = AvatarMinterABI.abi;
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    //Load Model from IndexedDB
+    const loadModelFromDB = async () => {
+      const modelDataObj = await getModelFromDB('currentModel');
+      if (modelDataObj && modelDataObj.modelData) {
+          const blob = new Blob([modelDataObj.modelData], { type: 'model/gltf-binary' });
+          const url = URL.createObjectURL(blob);
+          setModelUrl(url);
+          console.log("Model loaded from IndexedDB:", url);
+      } else {
+          setModelUrl("/models/default.glb");
+          console.log("Default model loaded.");
+      }
+    };
+
+    loadModelFromDB();
+  }, []); 
+
+
   const handleModelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setModelFile(file);
+        setModelFile(file);
+        const url = URL.createObjectURL(file);
+        setModelUrl(url);
+    } else {
+        setModelUrl("/models/default.glb"); 
     }
-  };  
+  };
 
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files?.[0];
@@ -173,7 +198,7 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
         />
       </div>
       <div>
-        <h2 className="text-xl font-semibold mb-4">Mint Your Avatar</h2>
+        <h2 className="text-xl font-semibold mb-4">Mint Avatar</h2>
         {error && <p className="text-red-500 mb-2">{error}</p>}
         {transactionHash && <p className="text-green-500 mb-2">Transaction Hash: {transactionHash}</p>}
 

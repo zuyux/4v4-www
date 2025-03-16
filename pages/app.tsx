@@ -1,7 +1,6 @@
 // pages/app.tsx
 'use client';
 
-// Import necessary dependencies
 import { useState, useEffect, useCallback } from 'react';
 import Navigation from '@/app/components/features/navigation/Navigation';
 import ErrorMessage from '@/app/components/features/common/ErrorMessage';
@@ -14,8 +13,9 @@ import { useSDK } from "@metamask/sdk-react";
 import { useRouter } from 'next/navigation'; 
 import MintModal from '@/app/components/features/avatar/MintModal'; 
 
+import { openDB, saveModelToDB, getModelFromDB } from '@/utils/IDB'; 
+
 export default function AppPage() {
-  const [selectedStyle, setSelectedStyle] = useState<string>('low-poly');
   const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');
   const [background, setBackground] = useState<string>('#f5f5f5');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -29,14 +29,22 @@ export default function AppPage() {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    
-    const savedModel = localStorage.getItem('currentModel');
-    if (savedModel && savedModel.startsWith("blob:")) {
-      console.warn("Blob URL found in localStorage, ignoring:", savedModel);
-    } else if (savedModel) {
-      setModelUrl(savedModel);
-      console.log("Model URL loaded from localStorage:", savedModel);
-    }
+
+    //Load Model from IndexedDB
+    const loadModelFromDB = async () => {
+      const modelDataObj = await getModelFromDB('currentModel');
+      if (modelDataObj && modelDataObj.modelData) {
+          const blob = new Blob([modelDataObj.modelData], { type: 'model/gltf-binary' });
+          const url = URL.createObjectURL(blob);
+          setModelUrl(url);
+          console.log("Model loaded from IndexedDB:", url);
+      } else {
+          setModelUrl("/models/default.glb");
+          console.log("Default model loaded.");
+      }
+    };
+
+    loadModelFromDB();
   }, []);  
   
   useEffect(() => {
@@ -56,40 +64,35 @@ export default function AppPage() {
     return true;
   };
 
-  const handleMenuSelect = (item: string) => setSelectedStyle(item);
   const handleSecondaryColorChange = (value: string) => setSecondaryColor(value);
 
-  const handleModelUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleModelUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      console.log('Model File uploaded:', file);
-      const url = URL.createObjectURL(file);
-      setModelUrl(url);
-      console.log("Model URL created:", url); // Show the created URL
-
-      // Guardar en localStorage solo si es un archivo local
-      if (!url.startsWith("blob:")) {
-        localStorage.setItem('currentModel', url);
-        console.log("Model URL saved to localStorage:", url);
-      }
+        console.log('Model File uploaded:', file);
+        const arrayBuffer = await file.arrayBuffer();
+        await saveModelToDB(arrayBuffer, file.name, 'currentModel'); // Pass filename
+        const url = URL.createObjectURL(file);
+        setModelUrl(url);
+        console.log("Model URL created:", url);
     } else {
-      console.log('No file selected.');
+        console.log('No file selected.');
     }
-  }, []);  
+  }, []);
 
   const handleBackground = (bg: string) => setBackground(bg);
   const handleShare = () => alert('Share functionality TBD');
   const handleReset = () => {
-    route.push('/'); // Use useRouter for navigation
+    route.push('/');
   };
-  const openModal = () => setIsModalOpen(true); // For Info Modal
-  const closeModal = () => setIsModalOpen(false); // For Info Modal
+  const openModal = () => setIsModalOpen(true); 
+  const closeModal = () => setIsModalOpen(false);
 
   // Functions to open and close Mint Modal
   const openMintModal = () => {
-    console.log('openMintModal called'); // Add this line
+    console.log('openMintModal called'); 
     setIsMintModalOpen(true);
-    console.log('isMintModalOpen state:', isMintModalOpen); // Add this line
+    console.log('isMintModalOpen state:', isMintModalOpen);
   };
 
   const closeMintModal = () => {
@@ -98,7 +101,7 @@ export default function AppPage() {
 
   return (
     <div className="h-screen bg-white text-black m-0 p-0 overflow-hidden" id="__next">
-      <Navigation selectedStyle={selectedStyle} onMenuSelect={handleMenuSelect} onModelUpload={handleModelUpload} />
+      <Navigation />
       <ErrorMessage message={errorMessage} onDismiss={() => setErrorMessage('')} />
       <div className="flex flex-row h-screen">
         <CenterPanel

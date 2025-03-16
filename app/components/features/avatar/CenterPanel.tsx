@@ -10,12 +10,12 @@ interface CenterPanelProps {
     background: string;
     secondaryColor: string;
     modelUrl?: string | null;
-    lightIntensity: number; // New prop for light intensity
+    lightIntensity: number; 
 }
 
 export default function CenterPanel({
     background, secondaryColor,
-    modelUrl, lightIntensity // Receive lightIntensity prop
+    modelUrl, lightIntensity 
 }: CenterPanelProps) {
     const mountRef = useRef<HTMLCanvasElement>(null);
     const sceneRef = useRef<BABYLON.Scene>(null);
@@ -43,6 +43,7 @@ export default function CenterPanel({
 
 
     useEffect(() => {
+        console.log("CenterPanel modelUrl:", modelUrl);
         if (!mountRef.current || typeof window === 'undefined') return;
 
         // Create the Babylon.js engine and scene
@@ -108,6 +109,7 @@ export default function CenterPanel({
         };
 
         const loadModel = (modelPath: string) => {
+            console.log('Loading model from:', modelPath);
             if (!sceneRef.current || !modelPath) return; 
 
             BABYLON.SceneLoader.ImportMesh('', modelPath, '', sceneRef.current, (meshes) => {
