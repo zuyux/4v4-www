@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, CuboidIcon as Cube, Download, Repeat, ShoppingCart, Users } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -60,13 +61,8 @@ export default function MainPage() {
                 </div>
               </div>
               <div className="flex items-center justify-center">
-                <div className="relative h-[450px] w-[450px] rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 p-1">
-                  <div className="h-full w-full rounded-lg bg-black flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="relative mx-auto h-80 w-80 animate-pulse rounded-full bg-blue-500/20"></div>
-                      <p className="mt-4 text-sm text-muted-foreground">3D Avatar Preview</p>
-                    </div>
-                  </div>
+                <div className="relative h-[450px] w-[450px] rounded-2xl">
+                  <Image src="/images/default.png" height={450} width={450} alt="default" className="rounded-xl"></Image>
                 </div>
               </div>
             </div>
