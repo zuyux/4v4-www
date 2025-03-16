@@ -1,3 +1,4 @@
+//components/features/avatar/FloatingPanel.tsx
 'use client';
 
 import { Share2, Upload, Save, Info } from 'lucide-react';
@@ -6,24 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface FloatingPanelProps {
-    texture: string;
     background: string;
-    onTextureUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onBackgroundChange: (color: string) => void;
     onShare: () => void;
     onModelUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onMint: () => void;
     onReset: () => void;
     onInfo: () => void;
-    color: string;
     secondaryColor: string;
-    onColorChange: (value: string) => void;
     onSecondaryColorChange: (value: string) => void;
 }
 
 export default function FloatingPanel({
-    color, secondaryColor, onColorChange, onSecondaryColorChange,
-    background, onTextureUpload,
+    secondaryColor, onSecondaryColorChange,
+    background,
     onBackgroundChange, onShare, onModelUpload, onMint, onInfo
 }: FloatingPanelProps) {
     return (

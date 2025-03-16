@@ -103,12 +103,14 @@ export default function CenterPanel({
                 const position = currentCamera.position;
                 setCameraPositionState(`${position.x.toFixed(2)}, ${position.y.toFixed(2)}, ${position.z.toFixed(2)}`);
                 setCameraZoomState(currentCamera.radius);
-                setCurrentLightIntensity(directionalLight.intensity); // Update light intensity state for display
+                setCurrentLightIntensity(directionalLight.intensity); 
             }
         };
 
         const loadModel = (modelPath: string) => {
-            BABYLON.SceneLoader.ImportMesh('', '/models/', modelPath, sceneRef.current, (meshes) => {
+            if (!sceneRef.current || !modelPath) return; 
+
+            BABYLON.SceneLoader.ImportMesh('', modelPath, '', sceneRef.current, (meshes) => {
                 if (meshes && meshes.length > 0) {
                     // Dispose of the old model if it exists
                     if (modelRef.current) {
@@ -130,7 +132,6 @@ export default function CenterPanel({
 
                     updateCameraInfo();
 
-
                     // Material application
                     if (!sceneRef.current) {
                         console.error("Scene not initialized, cannot create material.");
@@ -150,7 +151,7 @@ export default function CenterPanel({
         };
 
         // Load initial model
-        loadModel(modelUrl || 'mujerrobot.glb');
+        loadModel(modelUrl || 'default.glb');
 
         // Handle mouse events for drag functionality (rotation)
         const handleMouseDown = (event: MouseEvent) => {
@@ -277,11 +278,11 @@ export default function CenterPanel({
                     fontSize: '12px',
                     textAlign: 'right',
                 }}
-                className='flex space-x-4' // Modified to flex space-x-4
+                className='flex space-x-4' 
             >
                 <div>{cameraPositionState}</div>
                 <div>{cameraZoomState.toFixed(2)}</div>
-                <div>{currentLightIntensity.toFixed(2)}</div> {/* Display light intensity */}
+                <div>{currentLightIntensity.toFixed(2)}</div> 
             </div>
         </main>
     );

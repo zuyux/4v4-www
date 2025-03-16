@@ -113,10 +113,6 @@
   }
 }
 
-body {
-  overflow: hidden; /* Disallow general scrolling */
-}
-
 :focus {
   outline: none;
 }

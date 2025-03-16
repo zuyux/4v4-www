@@ -166,8 +166,6 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
     >
       <div>
         <CenterPanel
-          color={color}
-          texture={texture}
           background={background}
           secondaryColor={secondaryColor}
           modelUrl={modelUrl}
