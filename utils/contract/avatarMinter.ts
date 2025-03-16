@@ -2,13 +2,11 @@
 import { ethers } from 'ethers';
 
 export const CONTRACT_ADDRESS = "0x02EF301d55F89564b617419f32C5862BA7a98c3b";
+import AvatarMinterABI from '@/app/abi/AvatarMinterABI.json';
 
 // ABI for the functions we need
-export const CONTRACT_ABI = [
-  "function getMetadata(uint256 tokenId) external view returns (tuple(string name, string description, string image, string external_url, tuple(string trait_type, string value)[] attributes, string animation_url, address creator, bool soulbound, uint256 timestamp))",
-  "function tokenURI(uint256 tokenId) external view returns (string memory)",
-  "function totalSupply() external view returns (uint256)"
-];
+export const CONTRACT_ABI = AvatarMinterABI.abi;
+
 
 export interface AvatarAttribute {
   trait_type: string;
@@ -32,7 +30,7 @@ export async function getTokenMetadata(
   provider: any
 ): Promise<AvatarMetadata | null> {
   try {
-    // Create a provider
+    console.log("Fetching metadata for tokenId:", tokenId);
     const ethersProvider = provider 
       ? new ethers.BrowserProvider(provider)
       : new ethers.JsonRpcProvider("https://sepolia-rpc.scroll.io");
@@ -42,6 +40,7 @@ export async function getTokenMetadata(
     
     // Get token URI
     const uri = await contract.tokenURI(tokenId);
+    console.log("Token URI:", uri);
     
     // Parse IPFS URI
     let ipfsUrl = uri;
@@ -52,10 +51,14 @@ export async function getTokenMetadata(
     // Fetch metadata from IPFS
     const response = await fetch(ipfsUrl);
     const data = await response.json();
+    console.log("Metadata:", data);
     
     return data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching token metadata:", error);
+    if (error.reason) {
+      console.error("Revert reason:", error.reason);
+    }
     return null;
   }
 }

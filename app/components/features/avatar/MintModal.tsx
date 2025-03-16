@@ -69,7 +69,6 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
     loadModelFromDB();
   }, []); 
 
-
   const handleModelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -77,7 +76,9 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
         const url = URL.createObjectURL(file);
         setModelUrl(url);
     } else {
-        setModelUrl("/models/default.glb"); 
+        if (!modelUrl) {
+            setModelUrl("/models/default.glb");
+        }
     }
   };
 
