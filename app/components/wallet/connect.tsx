@@ -71,7 +71,7 @@ export default function Connect() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-100 p-2">
                         <DropdownMenuItem asChild>
-                            <Link href={`/${account}`} className="w-full px-2 py-1 rounded-md hover:bg-accent cursor-pointer">
+                            <Link href={`/u/${account}`} className="w-full px-2 py-1 rounded-md hover:bg-accent cursor-pointer">
                                 Profile
                             </Link>
                         </DropdownMenuItem>

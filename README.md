@@ -5,7 +5,7 @@
 
 ## 🛠 Tech Stack
 - **Frontend**: Next.js (React + TailwindCSS)
-- **3D Rendering**: Three.js / Babylon.js
+- **3D Rendering**: Babylon.js
 - **Blockchain**: Scroll zkEVM (ERC-721 NFTs)
 - **Storage**: IPFS / Arweave for 3D models and metadata
 - **Backend**: Node.js + Express
