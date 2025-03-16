@@ -10,7 +10,7 @@ const DarkNav: React.FC<NavigationProps> = ({ }) => {
     return (
         <header className="fixed top-0 left-0 right-0 z-50 border-b border-black backdrop-blur-lg transition-all shadow-sm">
             <div className='fixed left-0 top-3 px-6 text-white flex items-center space-x-4 ml-4 font-bold bg-[#181818] px-4 py-2 rounded-md transition-colors'>
-                <Link href="/">4v4</Link>
+                <Link href="/app">4v4</Link>
             </div>
             <div className="container flex items-center justify-between h-16 px-6">
                 {/* User & Wallet Actions */}
