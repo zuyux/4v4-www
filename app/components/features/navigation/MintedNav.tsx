@@ -17,7 +17,7 @@ const MintedNav: React.FC<NavigationProps> = ({ }) => {
                 {/* User & Wallet Actions */}
                 <div className="fixed right-0 flex items-center space-x-4 mr-4">
                     <div className='grid grid-cols-3 text-white text-sm font-semibold text-center space-x-4'>
-                        <Link href="/" className='bg-[#181818] px-4 py-2 rounded-md transition-colors'>
+                        <Link href="/create" className='bg-[#181818] px-4 py-2 rounded-md transition-colors'>
                             Create
                         </Link>
                         <Link href="/mint" className='bg-[#181818] px-4 py-2 rounded-md transition-colors'>
