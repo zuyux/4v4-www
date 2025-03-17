@@ -29,7 +29,7 @@ export default function MainPage() {
                     Marketplace
                   </Button>
                 </Link>
-                <Link href="/docs">
+                <Link href="https://4v4.gitbook.io/4v4" target="_blank">
                   <Button variant="ghost" size="sm">
                     Docs
                   </Button>
