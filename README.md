@@ -60,7 +60,7 @@ The dApp interacts with a **custom ERC-721 contract** deployed on **Scroll zkEVM
 - [ ] **Marketplace launch**
 - [ ] **Mobile support for avatar generation**
 
-Check Contracts here:[https://github.com/zuyux/4v4-contracts].
+Check Contracts here: [github.com/zuyux/4v4-contracts](https://github.com/zuyux/4v4-contracts)
 
 ---
 💡 **Want to contribute?** Open an issue or submit a pull request!
