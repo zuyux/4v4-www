@@ -1,9 +1,48 @@
+'use client'
 import Link from "next/link"
 import { ArrowRight, CuboidIcon as Cube, Download, Repeat, ShoppingCart, Users } from "lucide-react"
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button'; // Assuming you have your Button component
+import axios, { AxiosResponse } from 'axios';
 
-import { Button } from "@/components/ui/button"
+interface WaitlistSectionProps {} // eslint-disable-line @typescript-eslint/no-empty-object-type
 
-export default function MainPage() {
+interface WaitlistResponse {
+  message?: string;
+  error?: string;
+}
+
+const MainPage: React.FC<WaitlistSectionProps> = () => {
+  const [email, setEmail] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
+    try {
+      const response: AxiosResponse<WaitlistResponse> = await axios.post('/api/waitlist', { email });
+      if (response.status === 200) {
+        setSuccessMessage('Successfully added to the waitlist!');
+        setEmail('');
+      } else {
+        setErrorMessage('Failed to join the waitlist. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error joining waitlist:', error);
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
       <main className="overflow-y-auto">
@@ -45,7 +84,7 @@ export default function MainPage() {
         </header>
 
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 mx-auto">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 mx-auto mt-16 md:mt-0">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
@@ -257,13 +296,13 @@ export default function MainPage() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-foreground text-background">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 mb-16">
+              <div className="space-y-2 mb-8">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Ready to Join the Future?</h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Create your first interoperable 3D avatar and take it anywhere in the metaverse
                 </p>
               </div>
-              <div className="flex flex-col gap-8 min-[400px]:flex-row">
+              <div className="flex flex-col gap-8 min-[400px]:flex-row ">
                 <Link href="/app">
                   <Button size="lg" className="h-12 border border-gray-500">
                     Get Started Now
@@ -274,6 +313,23 @@ export default function MainPage() {
                     Learn More
                   </Button>
                 </Link>
+              </div>
+              <div className="flex flex-col gap-4 mb-8 w-full max-w-md mt-16">
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    required
+                    className="flex-1 px-4 py-2 border border-gray-500 rounded-xl text-background bg-foreground placeholder:text-background text-md"
+                  />
+                  <Button type="submit" disabled={loading} className="rounded-xl px-4 py-2 h-12 font-bold text-md border border-[.5px] border-gray-500">
+                    {loading ? 'Joining...' : 'Join Waitlist'}
+                  </Button>
+                </form>
+                {successMessage && <p className="text-green-500">{successMessage}</p>}
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               </div>
             </div>
           </div>
@@ -320,3 +376,5 @@ export default function MainPage() {
     </>
   )
 }
+
+export default MainPage; 
