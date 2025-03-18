@@ -18,11 +18,12 @@ export default function MintedPage() {
   const params = useParams();
   const txHash = params?.address as string;
   const [tokenId, setTokenId] = useState<string | null>(null);
-  const [background, setBackground] = useState<string>('#f5f5f5');
-  const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');
+  const [background] = useState<string>('#f5f5f5');
+  const [secondaryColor] = useState<string>('#ffffff');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { provider } = useSDK();
   const [lightIntensity] = useState<number>(11);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [metadata, setMetadata] = useState<any | null>(null);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function MintedPage() {
     if (tokenId && provider) {
       const fetchMetadata = async () => {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data = await getTokenMetadata(tokenId, provider);
           console.log("Data Fetched:", data);
           if (data) {

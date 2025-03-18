@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 
 import CenterPanel from './CenterPanel';
 
-import { openDB, saveModelToDB, getModelFromDB } from '@/utils/IDB'; 
+import { getModelFromDB } from '@/utils/IDB'; 
 
 interface MintModalProps {
   isOpen: boolean;
@@ -148,7 +148,7 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
           return;
         }        
 
-        const provider = new ethers.BrowserProvider(window.ethereum as any);
+        const provider = new ethers.BrowserProvider(window.ethereum);
 
         const signer = await provider.getSigner(account);
         const contract = new ethers.Contract(contractAddress, contractABI, signer);
@@ -356,7 +356,7 @@ const MintModal: React.FC<MintModalProps> = ({ isOpen, onClose }) => {
           </Button>
         </div>
       </div>
-      
+      {tokenURI}
     </Modal>
   );
 };

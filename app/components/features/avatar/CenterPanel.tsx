@@ -155,6 +155,19 @@ export default function CenterPanel({
         // Load initial model
         loadModel(modelUrl || 'default.glb');
 
+        // Animation loop
+        const rotationSpeed = 0.005; // Adjust this value to change rotation speed
+        engine.runRenderLoop(() => {
+            scene?.render();
+            updateCameraInfo();
+
+            if (cameraRef.current) {
+                cameraRef.current.alpha += rotationSpeed; // Rotate the camera
+                // Ensure the camera continues to target the model
+                cameraRef.current.target = new BABYLON.Vector3(0, 0.9, 0);
+            }
+        });
+
         // Handle mouse events for drag functionality (rotation)
         const handleMouseDown = (event: MouseEvent) => {
             event.preventDefault();
@@ -285,6 +298,7 @@ export default function CenterPanel({
                 <div>{cameraPositionState}</div>
                 <div>{cameraZoomState.toFixed(2)}</div>
                 <div>{currentLightIntensity.toFixed(2)}</div> 
+                {meshMaterial && <div>{meshMaterial.diffuseColor.toHexString()}</div>}
             </div>
         </main>
     );

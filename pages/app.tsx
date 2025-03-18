@@ -13,7 +13,7 @@ import { useSDK } from "@metamask/sdk-react";
 import { useRouter } from 'next/navigation'; 
 import MintModal from '@/app/components/features/avatar/MintModal'; 
 
-import { openDB, saveModelToDB, getModelFromDB } from '@/utils/IDB'; 
+import { saveModelToDB, getModelFromDB } from '@/utils/IDB'; 
 
 export default function AppPage() {
   const [secondaryColor, setSecondaryColor] = useState<string>('#ffffff');

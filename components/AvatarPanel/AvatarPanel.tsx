@@ -9,6 +9,7 @@ import { GridMaterial } from 'babylonjs-materials'; // Import GridMaterial direc
 interface AvatarPanelProps {
     background: string;
     secondaryColor: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     metadata: any | null;
     lightIntensity: number; 
 }
@@ -162,6 +163,19 @@ export default function AvatarPanel({
             loadModel('default.glb');
         }
 
+        // Animation loop
+        const rotationSpeed = 0.005; // Adjust this value to change rotation speed
+        engine.runRenderLoop(() => {
+            scene?.render();
+            updateCameraInfo();
+
+            if (cameraRef.current) {
+                cameraRef.current.alpha += rotationSpeed; // Rotate the camera
+                // Ensure the camera continues to target the model
+                cameraRef.current.target = new BABYLON.Vector3(0, 0.9, 0);
+            }
+        });
+
         // Handle mouse events for drag functionality (rotation)
         const handleMouseDown = (event: MouseEvent) => {
             event.preventDefault();
@@ -292,6 +306,7 @@ export default function AvatarPanel({
                 <div>{cameraPositionState}</div>
                 <div>{cameraZoomState.toFixed(2)}</div>
                 <div>{currentLightIntensity.toFixed(2)}</div> 
+                {meshMaterial && <div>{meshMaterial.diffuseColor.toHexString()}</div>}
             </div>
         </main>
     );

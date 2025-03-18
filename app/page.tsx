@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowRight, CuboidIcon as Cube, Download, Repeat, ShoppingCart, Users } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -29,7 +28,7 @@ export default function MainPage() {
                     Marketplace
                   </Button>
                 </Link>
-                <Link href="https://4v4.gitbook.io/4v4" target="_blank">
+                <Link href="/docs" target="_blank">
                   <Button variant="ghost" size="sm">
                     Docs
                   </Button>
@@ -73,8 +72,11 @@ export default function MainPage() {
                 </div>
               </div>
               <div className="flex items-center justify-center">
-                <div className="relative h-[450px] w-[450px] rounded-2xl">
-                  <Image src="/images/default.png" height={450} width={450} alt="default" className="rounded-xl"></Image>
+                <div className="relative h-[450px] w-[450px] rounded-2xl overflow-hidden">
+                  <video autoPlay loop muted playsInline className="w-full h-full object-cover">
+                    <source src="/vids/voxelbot.webm" type="video/webm" />
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
               </div>
             </div>
@@ -82,12 +84,15 @@ export default function MainPage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <section
+          id="features"
+          className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-200 to-pink-200 rounded-3xl"
+        >          
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Key Features</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl">
+                <p className="max-w-[900px] text-foreground md:text-xl">
                   4V4 provides everything you need to create, own, and use your digital identity across virtual worlds
                 </p>
               </div>
@@ -98,7 +103,7 @@ export default function MainPage() {
                   <Cube className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Create & Customize</h3>
-                <p className="text-center text-muted-foreground">
+                <p className="text-center text-foreground">
                   Design unique 3D avatars with extensive customization options
                 </p>
               </div>
@@ -107,7 +112,7 @@ export default function MainPage() {
                   <ShoppingCart className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Buy & Sell</h3>
-                <p className="text-center text-muted-foreground">
+                <p className="text-center text-foreground">
                   Trade avatars and accessories on our decentralized marketplace
                 </p>
               </div>
@@ -116,7 +121,7 @@ export default function MainPage() {
                   <Download className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Download & Export</h3>
-                <p className="text-center text-muted-foreground">
+                <p className="text-center text-foreground">
                   Export avatars in standard formats compatible with various platforms
                 </p>
               </div>
@@ -125,7 +130,7 @@ export default function MainPage() {
                   <Repeat className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Interoperability</h3>
-                <p className="text-center text-muted-foreground">
+                <p className="text-center text-foreground">
                   Seamlessly use your avatars across different games and metaverses
                 </p>
               </div>
@@ -148,7 +153,7 @@ export default function MainPage() {
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold">Digital Ownership</h3>
-                <p className="text-center text-muted-foreground">
+                <p className="text-center text-foreground">
                   True ownership of your digital assets secured by blockchain technology
                 </p>
               </div>
@@ -157,7 +162,7 @@ export default function MainPage() {
                   <Users className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">Community Hub</h3>
-                <p className="text-center text-muted-foreground">
+                <p className="text-center text-foreground">
                   Connect with creators and gamers in our growing community
                 </p>
               </div>
@@ -209,12 +214,12 @@ export default function MainPage() {
         </section>
 
         {/* Use Cases */}
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-blue-200 to-blue-500 border-t rounded-3xl -mb-16">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Use Cases</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl">
+                <p className="max-w-[900px] text-foreground md:text-xl">
                   4V4 enhances virtual identity and gaming experiences across multiple platforms
                 </p>
               </div>
@@ -222,25 +227,25 @@ export default function MainPage() {
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 md:grid-cols-2">
               <div className="flex flex-col space-y-2 rounded-lg border p-6 shadow-sm">
                 <h3 className="text-xl font-bold">Gaming</h3>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Use the same avatar across multiple games, maintaining your unique identity and appearance
                 </p>
               </div>
               <div className="flex flex-col space-y-2 rounded-lg border p-6 shadow-sm">
                 <h3 className="text-xl font-bold">Virtual Events</h3>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Attend virtual conferences, concerts, and social gatherings with your personalized avatar
                 </p>
               </div>
               <div className="flex flex-col space-y-2 rounded-lg border p-6 shadow-sm">
                 <h3 className="text-xl font-bold">Social Platforms</h3>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Connect with friends in social VR spaces using your consistent digital identity
                 </p>
               </div>
               <div className="flex flex-col space-y-2 rounded-lg border p-6 shadow-sm">
                 <h3 className="text-xl font-bold">Digital Creators</h3>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Design and sell avatar assets, earning rewards for your creativity
                 </p>
               </div>
@@ -252,13 +257,13 @@ export default function MainPage() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-foreground text-background">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
+              <div className="space-y-2 mb-16">
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">Ready to Join the Future?</h2>
                 <p className="max-w-[600px] text-muted-foreground md:text-xl">
                   Create your first interoperable 3D avatar and take it anywhere in the metaverse
                 </p>
               </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row">
+              <div className="flex flex-col gap-8 min-[400px]:flex-row">
                 <Link href="/app">
                   <Button size="lg" className="h-12 border border-gray-500">
                     Get Started Now
