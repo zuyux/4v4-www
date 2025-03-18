@@ -302,7 +302,7 @@ const MainPage: React.FC<WaitlistSectionProps> = () => {
                   Create your first interoperable 3D avatar and take it anywhere in the metaverse
                 </p>
               </div>
-              <div className="flex flex-col gap-8 min-[400px]:flex-row ">
+              <div className="flex flex-col gap-4 min-[400px]:flex-row ">
                 <Link href="/app">
                   <Button size="lg" className="h-12 border border-gray-500">
                     Get Started Now
