@@ -1,15 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import Image from 'next/image';
 import DarkNav from '@/app/components/features/navigation/DarkNav';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import ExploreButtons from '@/components/explore/exploreButtons';
 
 const avatars = [
   {
@@ -108,191 +101,30 @@ export default function Explore() {
         </div>
       </header>
 
-      {/* Buttons */}
-      <div className="flex space-x-4 mb-6">
-        {/* ... (Select components remain the same) */}
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Style" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Voxel</SelectItem>
-            <SelectItem value="dark">Anime</SelectItem>
-            <SelectItem value="system">Low Poly</SelectItem>
-            <SelectItem value="system">Stylized</SelectItem>
-            <SelectItem value="system">Cartoon</SelectItem>
-            <SelectItem value="system">Cartoon</SelectItem>
-            <SelectItem value="system">Pixel</SelectItem>
-            <SelectItem value="system">Victorian</SelectItem>
-            <SelectItem value="system">Steam Punk</SelectItem>
-            <SelectItem value="system">Gothic</SelectItem>
-            <SelectItem value="system">Isometric</SelectItem>
-            <SelectItem value="system">Grunch</SelectItem>
-            <SelectItem value="system">Medieval</SelectItem>
-            <SelectItem value="system">Fantasy</SelectItem>
-            <SelectItem value="system">Cyberpunk</SelectItem>
-            <SelectItem value="system">Minimalist</SelectItem>
-            <SelectItem value="system">Ancient</SelectItem>
-            <SelectItem value="system">Modern</SelectItem>
-            <SelectItem value="system">Post Apocalyptic</SelectItem>
-            <SelectItem value="system">Retro</SelectItem>
-            <SelectItem value="system">Sci Fi</SelectItem>
-            <SelectItem value="system">Abstract</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Technical Features" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Animated</SelectItem>
-            <SelectItem value="dark">Rigged</SelectItem>
-            <SelectItem value="system">PBR</SelectItem>
-            <SelectItem value="system">Modular</SelectItem>
-            <SelectItem value="system">Script</SelectItem>
-            <SelectItem value="system">Procedural</SelectItem>
-            <SelectItem value="system">Destructible</SelectItem>
-            <SelectItem value="system">Seamless</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Formats" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">UEFN</SelectItem>
-            <SelectItem value="dark">Unity</SelectItem>
-            <SelectItem value="system">3ds Max</SelectItem>
-            <SelectItem value="system">Blender</SelectItem>
-            <SelectItem value="system">Cinema 4D</SelectItem>
-            <SelectItem value="system">Maya</SelectItem>
-            <SelectItem value="system">ZBrush</SelectItem>
-            <SelectItem value="system">FBX</SelectItem>
-            <SelectItem value="system">GLB</SelectItem>
-            <SelectItem value="system">GLTF</SelectItem>
-            <SelectItem value="system">OBJ</SelectItem>
-            <SelectItem value="system">USD</SelectItem>
-            <SelectItem value="system">USDZ</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Tags" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">#</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Price" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">-</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Ratings" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">1</SelectItem>
-              <SelectItem value="dark">2</SelectItem>
-              <SelectItem value="system">3</SelectItem>
-              <SelectItem value="system">4</SelectItem>
-              <SelectItem value="system">5</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Publishers" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">-</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Date Published" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">-</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Licenses" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">CC-BY</SelectItem>
-            </SelectContent>
-          </Select>
+      <ExploreButtons/>
+      
+        {/* Avatar Grid with Scroll */}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-h-[80vh] mb-72">
+          {filteredAvatars.map((avatar) => (
+            <div
+              key={avatar.id}
+              className="bg-[#222] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="relative w-full pb-[100%]">
+                <img
+                  src={getImageUrl(avatar.image)}
+                  alt={`${avatar.style} avatar ${avatar.id}`}
+                  className="rounded-t-xl absolute inset-0 w-full h-full object-cover"
+                  />
+              </div>
+              <div className="p-4">
+                <h3 className="text-sm font-semibold">{avatar.label}</h3>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Avatar Grid with Scroll */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-h-[80vh]">
-          {filteredAvatars.map((avatar) => (
-            <div
-              key={avatar.id}
-              className="bg-[#222] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="relative w-full pb-[100%]">
-                <Image
-                  src={getImageUrl(avatar.image)}
-                  alt={`${avatar.style} avatar ${avatar.id}`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-xl"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-sm font-semibold">{avatar.label}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-h-[80vh]">
-          {filteredAvatars.map((avatar) => (
-            <div
-              key={avatar.id}
-              className="bg-[#222] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="relative w-full pb-[100%]">
-                <Image
-                  src={getImageUrl(avatar.image)}
-                  alt={`${avatar.style} avatar ${avatar.id}`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-xl"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-sm font-semibold">{avatar.label}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-h-[80vh]">
-          {filteredAvatars.map((avatar) => (
-            <div
-              key={avatar.id}
-              className="bg-[#222] rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="relative w-full pb-[100%]">
-                <Image
-                  src={getImageUrl(avatar.image)}
-                  alt={`${avatar.style} avatar ${avatar.id}`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-xl"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-sm font-semibold">{avatar.label}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
+        <div className='text-center'>...</div>
 
         {/* Fallback Message */}
         {filteredAvatars.length === 0 && (
